@@ -40,6 +40,11 @@ app.use('/api/auth', require('./routes/auth'));
 // Define the referrals route
 app.use('/api/referrals', require('./routes/referrals'));
 
+// Define a protected route
+app.get('/api/protected', require('./middleware/auth'), (req, res) => {
+    res.json({ msg: 'You have accessed a protected route', user: req.user });
+});
+
 const PORT = process.env.PORT || 3010;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
