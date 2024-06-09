@@ -1,54 +1,40 @@
-// routes/auth.js (or your corresponding file)
+// routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { check, validationResult } = require('express-validator');
+const authController = require('../controllers/authController');
+
+// Register route
+router.post(
+    '/register',
+    [
+        check('name', 'Name is required').not().isEmpty(),
+        check('email', 'Please include a valid email').isEmail(),
+        check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        authController.register(req, res);
+    }
+);
 
 // Login route
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        // Check if user exists
-        let user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+router.post(
+    '/login',
+    [
+        check('email', 'Please include a valid email').isEmail(),
+        check('password', 'Password is required').exists()
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
-
-        // Check password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
-        }
-
-        // Create JWT token
-        const payload = {
-            user: {
-                id: user.id,
-            },
-        };
-
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' },
-            (err, token) => {
-                if (err) throw err;
-                res.json({
-                    token,
-                    user: {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                    },
-                });
-            }
-        );
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        authController.login(req, res);
     }
-});
+);
 
 module.exports = router;

@@ -35,7 +35,7 @@ app.get('/api/test', (req, res) => {
 });
 
 // Define the auth route
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/authRoutes'));
 
 // Define the referrals route
 app.use('/api/referrals', require('./routes/referrals'));
