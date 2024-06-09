@@ -37,6 +37,9 @@ app.get('/api/test', (req, res) => {
 // Define the auth route
 app.use('/api/auth', require('./routes/auth'));
 
+// Define the referrals route
+app.use('/api/referrals', require('./routes/referrals'));
+
 const PORT = process.env.PORT || 3010;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
