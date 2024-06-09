@@ -54,18 +54,28 @@
 // module.exports = app;
 
 
-
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 
+// Middleware
+app.use(express.json());
+app.use(cors());
+
 // Add a simple route to respond with "Hello"
 app.get('/', (req, res) => {
     res.send('Hello');
+});
+
+// Define a basic API route for testing
+app.get('/api/test', (req, res) => {
+    res.json({ msg: 'API Test Route' });
 });
 
 const PORT = process.env.PORT || 3010;
