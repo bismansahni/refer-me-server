@@ -34,6 +34,9 @@ app.get('/api/test', (req, res) => {
     res.json({ msg: 'API Test Route' });
 });
 
+// Define the auth route
+app.use('/api/auth', require('./routes/auth'));
+
 const PORT = process.env.PORT || 3010;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
