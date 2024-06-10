@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -14,15 +13,6 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    jobProfile: {
-        type: String
-    },
-    companyName: {
-        type: String
-    },
-    resume: {
-        type: String
     },
     date: {
         type: Date,
