@@ -1,13 +1,13 @@
+// server/controllers/referralController.js
 const ReferralRequest = require('../models/ReferralRequest');
-const Notification = require('../models/Notifications'); // Ensure this is correct
+const Notification = require('../models/Notifications'); // Ensure this path is correct
 const UserProfile = require('../models/UserProfile');
-const User = require('../models/User'); // Ensure this is correct
+const User = require('../models/User'); // Ensure this path is correct
 
 exports.createReferralRequest = async (req, res) => {
     try {
         const { companyName, jobUrl, resumeUrl } = req.body;
 
-        // Fetch the requesting user's profile
         const requestingUser = await User.findById(req.user.id);
 
         const newRequest = new ReferralRequest({
@@ -19,10 +19,8 @@ exports.createReferralRequest = async (req, res) => {
 
         const referralRequest = await newRequest.save();
 
-        // Find employees working in the specified company from UserProfile
         const employees = await UserProfile.find({ companyName });
 
-        // Create a notification for each employee
         for (const employee of employees) {
             const notification = new Notification({
                 userId: employee.userId,
@@ -59,7 +57,6 @@ exports.giveReferral = async (req, res) => {
             return res.status(404).json({ msg: 'Referral request not found' });
         }
 
-        // Assuming giving a referral means marking it as fulfilled or something similar
         referral.fulfilled = true;
         await referral.save();
 

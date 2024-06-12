@@ -1,7 +1,8 @@
+// server/routes/referrals.js
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-const referralController = require('../controllers/referralController');
+const referralController = require('../controllers/referralController'); // Ensure this path is correct
 const auth = require('../middleware/auth');
 
 router.post(
