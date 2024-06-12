@@ -35,17 +35,17 @@ app.get('/api/protected', auth, (req, res) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve static files from the React app in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
+// if (process.env.NODE_ENV === 'production') {
+//     app.use(express.static(path.join(__dirname, '../client/build')));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build/index.html'));
-    });
-}
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.join(__dirname, '../client/build/index.html'));
+//     });
+// }
 
 // Add a route to respond with "Hello"
 app.get('/', (req, res) => {
-    res.send('Hello');
+    res.send('Server is up and running here');
 });
 
 const PORT = process.env.PORT || 3010;
