@@ -1,10 +1,14 @@
 const ReferralRequest = require('../models/ReferralRequest');
 const Notification = require('../models/Notifications'); // Ensure this is correct
 const UserProfile = require('../models/UserProfile');
+const User = require('../models/User'); // Ensure this is correct
 
 exports.createReferralRequest = async (req, res) => {
     try {
         const { companyName, jobUrl, resumeUrl } = req.body;
+
+        // Fetch the requesting user's profile
+        const requestingUser = await User.findById(req.user.id);
 
         const newRequest = new ReferralRequest({
             companyName,
@@ -25,7 +29,7 @@ exports.createReferralRequest = async (req, res) => {
                 applicantId: req.user.id,
                 companyName: companyName,
                 jobUrl: jobUrl,
-                message: `A new referral request for ${companyName} has been made.`
+                message: `A new referral request for ${companyName} has been made by ${requestingUser.name}.`
             });
             await notification.save();
         }
