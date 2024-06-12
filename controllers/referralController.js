@@ -1,15 +1,35 @@
 const ReferralRequest = require('../models/ReferralRequest');
+const Notification = require('../models/Notifications'); // Ensure this is correct
+const UserProfile = require('../models/UserProfile');
 
 exports.createReferralRequest = async (req, res) => {
     try {
+        const { companyName, jobUrl, resumeUrl } = req.body;
+
         const newRequest = new ReferralRequest({
-            title: req.body.title,
-            description: req.body.description,
-            industry: req.body.industry,
+            companyName,
+            jobUrl,
+            resumeUrl,
             user: req.user.id
         });
 
         const referralRequest = await newRequest.save();
+
+        // Find employees working in the specified company from UserProfile
+        const employees = await UserProfile.find({ companyName });
+
+        // Create a notification for each employee
+        for (const employee of employees) {
+            const notification = new Notification({
+                userId: employee.userId,
+                applicantId: req.user.id,
+                companyName: companyName,
+                jobUrl: jobUrl,
+                message: `A new referral request for ${companyName} has been made.`
+            });
+            await notification.save();
+        }
+
         res.json(referralRequest);
     } catch (err) {
         console.error(err.message);
@@ -27,7 +47,6 @@ exports.getReferralRequests = async (req, res) => {
     }
 };
 
-// Add the giveReferral function
 exports.giveReferral = async (req, res) => {
     try {
         const referral = await ReferralRequest.findById(req.params.id);

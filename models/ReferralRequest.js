@@ -5,15 +5,15 @@ const ReferralRequestSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    title: {
+    companyName: {
         type: String,
         required: true
     },
-    description: {
+    jobUrl: {
         type: String,
         required: true
     },
-    industry: {
+    resumeUrl: {
         type: String,
         required: true
     },

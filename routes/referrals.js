@@ -9,9 +9,9 @@ router.post(
     [
         auth,
         [
-            check('title', 'Title is required').not().isEmpty(),
-            check('description', 'Description is required').not().isEmpty(),
-            check('industry', 'Industry is required').not().isEmpty()
+            check('companyName', 'Company name is required').not().isEmpty(),
+            check('jobUrl', 'Job URL is required').not().isEmpty(),
+            check('resumeUrl', 'Resume URL is required').not().isEmpty()
         ]
     ],
     (req, res) => {
@@ -25,7 +25,6 @@ router.post(
 
 router.get('/', auth, referralController.getReferralRequests);
 
-// Add a route for giving a referral
 router.post('/give/:id', auth, referralController.giveReferral);
 
 module.exports = router;
